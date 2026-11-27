@@ -43,17 +43,22 @@ Technology choices will be finalized during development.
 
 ```text
 money-tracker/
-│
-├── README.md
-│
-├── frontend/
-│
-├── backend/
-│
-├── docs/
-│
-└── .gitignore
+├── app/                    # Android application module (Kotlin, Jetpack Compose)
+│   └── src/
+│       ├── main/           # App source, resources and AndroidManifest.xml
+│       ├── test/           # Local JVM unit tests
+│       └── androidTest/    # Instrumented tests (emulator or device)
+├── gradle/                 # Version catalog (libs.versions.toml) and Gradle wrapper
+├── docs/                   # Project documentation (canonical)
+│   └── planning/           # Archived pre-repository planning notes
+├── research/               # Research guidelines (no personal data)
+├── CLAUDE.md               # Working agreement for AI-assisted development
+├── build.gradle.kts
+├── settings.gradle.kts
+└── README.md
 ```
+
+`docs/planning/` contains archived planning notes written before this repository existed. Where they conflict with `docs/*.md`, the `docs/*.md` files take precedence.
 
 *The project structure will evolve as development progresses.*
 
@@ -71,13 +76,25 @@ git clone https://github.com/yatharthJhero/money-tracker.git
 cd money-tracker
 ```
 
-### 3. Install Dependencies
+### 3. Open in Android Studio
 
-Installation instructions will be updated once the frontend and backend technologies are finalized.
+Open the cloned folder in Android Studio and let Gradle sync finish. Android Studio creates `local.properties` with your Android SDK path; this file is machine-specific and git-ignored.
 
-### 4. Run the Application
+### 4. Build and Test
 
-Run instructions will be added after the initial application setup.
+Use the JDK bundled with Android Studio. From the project root:
+
+```powershell
+# Windows
+.\gradlew.bat assembleDebug testDebugUnitTest
+```
+
+```bash
+# macOS / Linux
+./gradlew assembleDebug testDebugUnitTest
+```
+
+To run the app, select the `app` run configuration in Android Studio and choose an emulator or a connected device.
 
 ## 📊 Future Enhancements
 

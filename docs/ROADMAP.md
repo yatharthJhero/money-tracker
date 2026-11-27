@@ -1,7 +1,7 @@
 # Roadmap
 
 ## Now — MVP foundation
-- [ ] Android project and GitHub repository
+- [x] Android project and GitHub repository
 - [ ] Expense domain model
 - [ ] Add expense form
 - [ ] Local persistence
