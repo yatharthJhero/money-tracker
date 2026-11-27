@@ -2,12 +2,13 @@
 
 ## Now — MVP foundation
 - [x] Android project and GitHub repository
-- [ ] Expense domain model
+- [x] Expense domain model (`Expense`, `ExpenseCategory`, unit tests)
+- [x] Local persistence: Room data layer (entity, DAO, database, mapper, repository) with JVM and instrumented tests
+- [ ] Persistence wired into the app (ViewModel + manual wiring); nothing in the UI uses the database yet
 - [ ] Add expense form
-- [ ] Local persistence
 - [ ] Transaction list
 - [ ] Category totals
-- [ ] Unit tests and basic UI tests
+- [ ] Unit tests and basic UI tests (unit and database tests exist; UI tests do not)
 
 ## Next — Usability and validation
 - [ ] Test with a few students and working professionals
