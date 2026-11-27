@@ -3,7 +3,7 @@
 You are assisting an intermediate solo developer building Money Tracker, an Android application in Kotlin on Windows.
 
 ## Before changing code
-1. Read `README.md` and the relevant files in `docs/`.
+1. Read `README.md` and the relevant files in `docs/`. `docs/planning/` holds archived pre-repository planning notes; where they conflict with `docs/*.md`, the `docs/*.md` files take precedence.
 2. Inspect the existing project and its Gradle / Android / Kotlin versions. Do not blindly replace working configuration.
 3. State the smallest implementation plan before making changes.
 4. Ask before adding a dependency, changing architecture, deleting files, or introducing a cloud service.
