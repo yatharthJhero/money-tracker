@@ -1,3 +1,52 @@
 <resources>
     <string name="app_name">Money Tracker</string>
+
+    <!-- Add expense form -->
+    <string name="add_expense_title">Add expense</string>
+    <string name="amount_label">Amount (INR)</string>
+    <string name="amount_prefix">₹</string>
+    <string name="amount_placeholder">125.50</string>
+    <string name="amount_helper">Rupees, with up to 2 decimal places.</string>
+    <string name="category_label">Category</string>
+    <string name="description_label">Description (optional)</string>
+    <string name="description_counter">%1$d/%2$d</string>
+    <string name="date_button">Date: %1$s</string>
+    <string name="date_picker_confirm">OK</string>
+    <string name="date_picker_cancel">Cancel</string>
+    <string name="save_expense">Save expense</string>
+    <string name="saving_expense">Saving…</string>
+
+    <!-- Validation messages -->
+    <string name="error_amount_empty">Enter an amount.</string>
+    <string name="error_amount_malformed">Enter a valid amount, for example 125.50.</string>
+    <string name="error_amount_negative">The amount can\'t be negative.</string>
+    <string name="error_amount_zero">The amount must be more than ₹0.</string>
+    <string name="error_amount_too_many_decimals">Use at most 2 decimal places.</string>
+    <string name="error_amount_too_large">The amount can\'t be more than %1$s.</string>
+    <string name="error_category_missing">Choose a category.</string>
+    <string name="error_date_in_future">The date can\'t be in the future.</string>
+    <string name="error_description_too_long">The description is too long. Maximum length: %1$d.</string>
+
+    <!-- Save feedback -->
+    <string name="message_saved">Expense saved.</string>
+    <string name="message_save_failed">Couldn\'t save the expense. Your entry is still here, so you can try again.</string>
+
+    <!-- Transaction list -->
+    <string name="transactions_title">Transactions</string>
+    <string name="transactions_loading">Loading your expenses…</string>
+    <string name="transactions_error">Couldn\'t load your expenses.</string>
+    <string name="transactions_empty_title">No expenses yet</string>
+    <string name="transactions_empty_body">Expenses you save will appear here, newest first.</string>
+
+    <!-- Expense categories -->
+    <string name="category_food">Food</string>
+    <string name="category_groceries">Groceries</string>
+    <string name="category_transport">Transport</string>
+    <string name="category_shopping">Shopping</string>
+    <string name="category_education">Education</string>
+    <string name="category_health">Health</string>
+    <string name="category_entertainment">Entertainment</string>
+    <string name="category_utilities">Utilities</string>
+    <string name="category_rent">Rent</string>
+    <string name="category_other">Other</string>
 </resources>

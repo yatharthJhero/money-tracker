@@ -4,11 +4,12 @@
 - [x] Android project and GitHub repository
 - [x] Expense domain model (`Expense`, `ExpenseCategory`, unit tests)
 - [x] Local persistence: Room data layer (entity, DAO, database, mapper, repository) with JVM and instrumented tests
-- [ ] Persistence wired into the app (ViewModel + manual wiring); nothing in the UI uses the database yet
-- [ ] Add expense form
-- [ ] Transaction list
+- [x] Persistence wired into the app (`ExpenseViewModel` + manual wiring in `MainActivity`)
+- [x] Add expense form (amount in INR, category, optional description, date ≤ today; validation, saving and feedback states)
+- [x] Transaction list (newest first, reactive, empty state; survives app restart)
 - [ ] Category totals
-- [ ] Unit tests and basic UI tests (unit and database tests exist; UI tests do not)
+- [x] Unit tests and basic UI tests (JVM unit tests, Room instrumented tests, basic Compose UI tests)
+- [ ] Edit and delete an expense from the UI (repository support exists; no UI yet)
 
 ## Next — Usability and validation
 - [ ] Test with a few students and working professionals

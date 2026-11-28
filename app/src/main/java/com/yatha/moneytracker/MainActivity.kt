@@ -4,44 +4,30 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.activity.viewModels
+import com.yatha.moneytracker.data.local.MoneyTrackerDatabase
+import com.yatha.moneytracker.data.repository.ExpenseRepository
+import com.yatha.moneytracker.ui.expense.ExpenseRoute
+import com.yatha.moneytracker.ui.expense.ExpenseViewModel
 import com.yatha.moneytracker.ui.theme.MoneyTrackerTheme
 
 class MainActivity : ComponentActivity() {
+
+    // Manual dependency wiring: database (process-wide singleton) -> repository -> ViewModel.
+    // The ViewModel survives configuration changes such as screen rotation.
+    private val expenseViewModel: ExpenseViewModel by viewModels {
+        ExpenseViewModel.factory(
+            ExpenseRepository(MoneyTrackerDatabase.getInstance(applicationContext).expenseDao()),
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             MoneyTrackerTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                ExpenseRoute(viewModel = expenseViewModel)
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MoneyTrackerTheme {
-        Greeting("Android")
     }
 }

@@ -70,3 +70,67 @@
 
 **Verification:** Lint reports no errors for these files. The actual backup behaviour has not been exercised on a device.  
 **Revisit if:** Users ask for cloud backup and explicitly opt in.
+
+## D-008 — Manual entries store a calendar date as 12:00 local time
+**Status:** Accepted (implemented 2026-11-28)  
+**Decision:**
+- The add-expense form asks for a date, not a time; it defaults to today and allows today or earlier.
+- The date is stored in the existing `transaction_date` column (epoch milliseconds) as **12:00 noon in the device's time zone** on that date.
+- `created_at` stores the real moment of saving.
+- Dates are handled with a small `CalendarDate` class built on `java.util.GregorianCalendar`, not `java.time`.
+
+**Reasons:**
+- Noon is never skipped or repeated by daylight-saving changes.
+- Noon keeps the same calendar date when viewed from any time zone within ±11 hours. Midnight would show as the previous day as soon as the phone moved one hour west.
+- `java.time` needs API 26 (minSdk is 24) or core-library desugaring, which would be an extra dependency and build configuration. Material 3's DatePicker works on API 24 without it.
+- No schema change was needed.
+
+**Trade-offs:**
+- Manual entries on the same day are ordered by insertion (`id`), not by a real time of day.
+- Future imported transactions with real times will sort around noon for that day.
+
+**Revisit if:** users need a time of day, or the project adopts desugaring / raises minSdk to 26.
+
+## D-009 — Amount input: strict format, exact conversion, ₹99,99,99,999.99 maximum
+**Status:** Accepted (implemented 2026-11-28)  
+**Decision:**
+- Amount text must be ASCII digits with an optional `.` and at most two decimals. `5.` and `.5` are allowed; surrounding whitespace is ignored.
+- It is converted to paise with `BigDecimal`.
+- Commas, signs, currency symbols, exponents and non-ASCII digits are rejected, each with a clear message.
+- The maximum single expense is **₹99,99,99,999.99** (`99_999_999_999` paise).
+
+**Reasons:**
+- Float and Double cannot represent most decimal amounts exactly. For example, `0.29 * 100` is `28.999999999999996` as a Double.
+- Accepting `1,000` or `10,5` risks silently misreading the amount, because a comma is a thousands separator in India but a decimal separator elsewhere.
+- The cap is far below `Long.MAX_VALUE`, so summing tens of millions of maximum-size expenses for totals cannot overflow a `Long`. SQLite's `SUM` raises an error on integer overflow.
+
+**Revisit if:** users need larger amounts or grouping commas in input.
+
+## D-010 — One screen, ViewModel with StateFlow, manual wiring
+**Status:** Accepted (implemented 2026-11-28)  
+**Decision:**
+- The add form and the transaction list share one Compose screen.
+- `ExpenseViewModel` exposes `formState` and `listState` as `StateFlow`s and uses `viewModelScope`.
+- Composables are stateless (state in, events out).
+- `MainActivity` wires database → repository → ViewModel by hand.
+- No Navigation library, no Hilt/Koin/Dagger, no `lifecycle-viewmodel-compose`.
+
+**Reasons:**
+- This is the smallest structure that meets the milestone, and it is easy for a solo intermediate developer to follow.
+- Every library used was already on the classpath through Compose and Activity. The only new explicit dependencies are `lifecycle-viewmodel-ktx` and `lifecycle-runtime-compose`, which already resolved to 2.9.4 transitively, plus test-only `kotlinx-coroutines-test` (see `TECH_STACK.md`).
+
+**Revisit if:** a second screen (e.g. edit expense or totals) makes navigation worthwhile, or manual wiring becomes repetitive.
+
+## D-011 — Upgrade AndroidX Test to Espresso 3.7.0 / ext.junit 1.3.0 (test-only)
+**Status:** Accepted (implemented 2026-11-28)  
+**Decision:** The test dependencies `espresso-core` move from 3.5.1 to **3.7.0**, and `androidx.test.ext:junit` from 1.1.5 to **1.3.0**. These are the same coordinated androidx.test release (core 1.7.0, runner 1.7.0, monitor 1.8.0).  
+**Reason:**
+- Every Compose UI test failed on the API 37 emulator with `NoSuchMethodException: android.hardware.input.InputManager.getInstance`. Espresso 3.5.1 reaches that Android internal by reflection.
+- The official AndroidX Test release notes list the fix in Espresso 3.7.0 (stable, 30 July 2025): "Use getSystemService instead of reflective InputManager.getInstance".
+- 3.7.0 requires minSdk 21 and Kotlin 1.9+, both satisfied.
+
+**Impact:**
+- Test APK only. App runtime dependencies are unchanged.
+- Gradle still resolves coroutines 1.9.0 for the tests, matching the app.
+
+**Cost:** ₹0 (Apache 2.0).
